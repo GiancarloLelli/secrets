@@ -1,4 +1,4 @@
-# Console Application Secrets Library
+## Console Application Secrets Library
 This repo contains .NET library that allows you to handle configuration settings in a flavour much alike the one offered by ASP.NET configuration secrets.
 The foundation of this library is simply a wrapper around the static class **ConfigurationManager** contained in the namespece *System.Configuration*.
 This library basically allows you inject into a custom collection called *Secrets* any settings either stored in a JSON file on you machine or returned by an HTTP/S endpoint.
@@ -31,7 +31,7 @@ class Program
 }
 ```
 
-#NuGet Package
+# NuGet Package
 A NuGet package is available [here](https://www.nuget.org/packages/GL.Console.Secrets)
 
 # License and contact
