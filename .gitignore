@@ -21,6 +21,7 @@ bld/
 [Bb]in/
 [Oo]bj/
 [Ll]og/
+deploy/
 
 # Visual Studio 2015 cache/options directory
 .vs/
@@ -45,6 +46,7 @@ project.lock.json
 project.fragment.lock.json
 artifacts/
 
+*.pubxml
 *_i.c
 *_p.c
 *_i.h
