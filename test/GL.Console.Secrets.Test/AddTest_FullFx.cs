@@ -6,7 +6,7 @@ using System.IO;
 namespace GL.Console.Secrets.Test
 {
     [TestClass]
-    public class AddTest
+    public class AddTest_FullFx
     {
         [TestMethod]
         public void Adding_Secrets_From_Existing_File()
