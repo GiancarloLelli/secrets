@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace GL.Console.Secrets.Extensions
 {
@@ -31,7 +32,7 @@ namespace GL.Console.Secrets.Extensions
             }
         }
 
-        public static void AddSecretFromProtectedEndpoint(this ExtendedConfigurationManager manager, string endpointUrl, Func<string> tokenAction, Func<HttpResponseMessage, Dictionary<string, string>> deserializationHandler)
+        public static void AddSecretFromProtectedEndpointAsync(this ExtendedConfigurationManager manager, string endpointUrl, Func<Task<string>> tokenAction, Func<HttpResponseMessage, Task<Dictionary<string, string>>> deserializationHandler)
         {
             if (tokenAction == null)
                 throw new ArgumentNullException(nameof(tokenAction));
@@ -42,12 +43,15 @@ namespace GL.Console.Secrets.Extensions
             if (!Uri.TryCreate(endpointUrl, UriKind.Absolute, out Uri uriResult) || (uriResult?.Scheme != Uri.UriSchemeHttp && uriResult?.Scheme != Uri.UriSchemeHttps))
                 throw new UriFormatException("Invalid endpoint URL provided or non HTTPS URL");
 
-            var header = tokenAction.Invoke();
             using (var client = new HttpClient())
             {
+                var header = tokenAction.Invoke().GetAwaiter().GetResult();
                 client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", header);
+
                 var httpResponse = client.GetAsync(new Uri(endpointUrl)).GetAwaiter().GetResult();
-                var settings = deserializationHandler.Invoke(httpResponse);
+                httpResponse.EnsureSuccessStatusCode();
+
+                var settings = deserializationHandler.Invoke(httpResponse).GetAwaiter().GetResult();
                 InternalHelper.AddRange(manager, settings);
             }
         }
