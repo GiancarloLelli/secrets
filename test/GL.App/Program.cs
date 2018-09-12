@@ -14,6 +14,9 @@ namespace GL.App
             ext.AddSecretsFromEndpoint("https://jsonplaceholder.typicode.com/posts/1");
             ext.AddSecretsFromJson("secretsTest.json");
             ext.AddSecretFromProtectedEndpointAsync("https://jsonplaceholder.typicode.com/posts/1", GetToken, ParseResponseMessage);
+
+            // All the settings are now in the Secret collection
+            System.Console.WriteLine($"Settings: {ext.Secrets["title"]}");
         }
 
         static async Task<string> GetToken()
